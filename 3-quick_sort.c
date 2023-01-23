@@ -1,120 +1,71 @@
 #include "sort.h"
 
+/**
+ * partition - scans a partition of an array of integers for values less than
+ * pivot value, and swaps them with first value in partition, then swaps pivot
+ * value with first value in partition
+ * @array: array of integers to be sorted
+ * @low: index in array that begins partition
+ * @high: index in array that ends partition
+ * @size: amount of elements in array
+ * Return: new index at which to start new recursive partition
+ */
+int partition(int *array, int low, int high, size_t size)
+{
+	int i, j, pivot, temp;
 
-void swap_element(int *array, int size, int idx_1, int idx_2);
-/*size_t n = 10;*/
+	pivot = array[high];
+	i = low;
+	for (j = low; j < high; j++)
+	{
+		if (array[j] < pivot)
+		{
+			temp = array[i];
+			array[i] = array[j];
+			array[j] = temp;
+			if (array[i] != array[j])
+				print_array(array, size);
+			i++;
+		}
+	}
+	temp = array[i];
+	array[i] = array[high];
+	array[high] = temp;
+	if (array[i] != array[high])
+		print_array(array, size);
+	return (i);
+}
 
 /**
- * quick_sort - sorts an array of integers in ascending orders
- * using the Quick sort algorithm and the Lomuto partition scheme
- *
- * @array: Array to be sorted
- * @size: Number of element in array
- *
+ * quicksort - recursively sorts array of integers by separating into two
+ * partitions, using Lomuto quick sort
+ * @array: array of integers to be sorted
+ * @low: index in array that begins partition
+ * @high: index in array that ends partition
+ * @size: amount of elements in array
  */
+void quicksort(int *array, int low, int high, size_t size)
+{
+	int p;
 
+	if (low < high)
+	{
+		p = partition(array, low, high, size);
+		quicksort(array, low, p - 1, size);
+		quicksort(array, p + 1, high, size);
+	}
+}
+
+/**
+ * quick_sort - sorts an array of integers in ascending order using a quick
+ * sort algorithm, with Lomuto partition scheme
+ * @array: array of integers to be sorted
+ * @size: amount of elements in array
+ */
 void quick_sort(int *array, size_t size)
 {
-	int end = size - 1;
-
-	if (array == NULL || size < 2)
-	{
+	if (!array || size < 2)
 		return;
-	}
 
-	_quick_sort(array, size, 0, end);
-}
-
-/**
- * _quick_sort - sorts by partitions the array repeatedly until
- * the appropriate position of an element is found
- *
- * @array: Array to sort
- * @size: size of given array
- * @start: beginning of the array
- * @end: end of the array
- *
- */
-
-void _quick_sort(int *array, size_t size, size_t start, size_t end)
-{
-	int pi; /* pivot index */
-	int a = 0; /* comparison index */
-	/*size_t start = 0;*/
-	/*size_t end = size - 1;*/
-	/*const int n = size;*/
-	/*size_t n = 0;*/
-
-	/*print_array(array, end);*/
-	if (start < end)
-	{
-		pi = end;
-		a = start;
-
-		while (pi != a)
-		{
-			if (array[pi] > array[a] && pi < a)
-			{
-				swap_element(array, size, pi, a);
-			}
-			else if (array[pi] < array[a] && pi > a)
-			{
-				swap_element(array, size, pi, a);
-			}
-			else
-			{
-			}
-
-			if (pi < a)
-			{
-				a -= 1;
-			}
-			else if (pi > a)
-			{
-				a += 1;
-			}
-		}
-		if (array[pi] > array[pi - 1])
-		{
-			end = pi - 1;
-			_quick_sort(array, size, 0, end);
-		}
-		else
-		{
-			start = pi + 1;
-			end = size - 1;
-			_quick_sort(array, size, start, end);
-		}
-	}
-}
-
-
-
-/**
- * swap_element - swap the position of two elemnt in an array
- *
- * @array: The array that contains the element to swap
- * @size: size of the array
- * @idx_1: An element index to be swapped
- * @idx_2: An element index to be swapped
- *
- */
-
-void swap_element(int *array, int size, int idx_1, int idx_2)
-{
-	int temp = 0;
-
-
-	/* Swaps Array Element */
-	temp = array[idx_1];
-	array[idx_1] = array[idx_2];
-	array[idx_2] = temp;
-
-	/* Swaps Index */
-	temp = idx_1;
-	idx_1 = idx_2;
-	idx_2 = temp;
-	print_array(array, size);
-
-
+	quicksort(array, 0, (int)size - 1, size);
 }
